@@ -104,7 +104,7 @@ def visualize_gfbs_video(matrix, start, goal, bonus_points):
             clock.tick(15)  # Limit the frame rate
             continue
         
-        if (curState[0] != start[0] and curState[1] != start[1]):
+        if (curState[0] != start[0] or curState[1] != start[1]):
             matrix[curState[0]][curState[1]] = 'o'
         #find neighbour cells that agent can move from the current cell (top, left, bottom, right)
         neighbours = findLegalCells(matrix, curState)

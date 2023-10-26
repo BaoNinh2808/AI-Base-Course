@@ -20,7 +20,7 @@ def findMinEstimate(open, goal, estimate):
             index = i
     return index
 
-def findExit(State, set):
+def findAppearancePosition(State, set):
     for i in range(len(set)):
         if set[i][0] == State:
             return i
@@ -28,7 +28,6 @@ def findExit(State, set):
 
 def AStar(matrix, start, goal):
     open = [[start,0]]  #open set
-    close = []          #close set
     predessor = {}      #store the predessor of one cell - use for trace back
 
     while (len(open) > 0):  #is not empty 
@@ -44,19 +43,11 @@ def AStar(matrix, start, goal):
         
         #for each cell, check if is accessed yet - if not accessed yet, put it into the open list
         for cell in neighbours:
-            if tuple(cell) not in predessor:    #Convert to tuple for using dictionary
+            o_index = findAppearancePosition(cell, open)
+            if (tuple(cell) not in predessor) or (o_index >= 0 and open[o_index][1] > curDis+1):    #Convert to tuple for using dictionary
                 open.append([cell, curDis+1])
                 predessor[tuple(cell)] = curState   #set the predessor of this cell is curState
             
-            o_index = findExit(cell, open)
-            c_index = findExit(cell, close)
-            if (o_index >= 0 and open[o_index][1] > curDis+1):
-                open.append([cell, curDis+1])
-                predessor[tuple(cell)] = curState   #set the predessor of this cell is curState
-            if (c_index >= 0 and open[c_index][1] > curDis+1):
-                open.append([cell, curDis+1])
-                predessor[tuple(cell)] = curState   #set the predessor of this cell is curState
-
     if tuple(goal) not in predessor:    #Cann't find the path
         return None
 
@@ -81,7 +72,6 @@ def visualize_AStar_video(matrix, start, goal, bonus_points):
         matrix[x][y] = 'p'
 
     open = [[start,0]]  #open set
-    close = []          #close set
     predessor = {}      #store the predessor of one cell - use for trace back
 
     while running:
@@ -100,7 +90,7 @@ def visualize_AStar_video(matrix, start, goal, bonus_points):
             clock.tick(1) 
 
 
-        ##one step of GFBS
+        ##one step of Astar
         if (len(open) <= 0): break
 
         minEstimateIndex = findMinEstimate(open, goal, estimate)
@@ -125,23 +115,15 @@ def visualize_AStar_video(matrix, start, goal, bonus_points):
             clock.tick(15)  # Limit the frame rate
             continue
         
-        if (curState[0] != start[0] and curState[1] != start[1]):
-            matrix[curState[0]][curState[1]] = 'o'
+        if ((curState[0] != start[0]) or (curState[1] != start[1])):
+                matrix[curState[0]][curState[1]] = 'o'
         #find neighbour cells that agent can move from the current cell (top, left, bottom, right)
         neighbours = findLegalCells(matrix, curState)
         
         #for each cell, check if is accessed yet - if not accessed yet, put it into the open list
         for cell in neighbours:
-            if tuple(cell) not in predessor:    #Convert to tuple for using dictionary
-                open.append([cell, curDis+1])
-                predessor[tuple(cell)] = curState   #set the predessor of this cell is curState
-            
-            o_index = findExit(cell, open)
-            c_index = findExit(cell, close)
-            if (o_index >= 0 and open[o_index][1] > curDis+1):
-                open.append([cell, curDis+1])
-                predessor[tuple(cell)] = curState   #set the predessor of this cell is curState
-            if (c_index >= 0 and open[c_index][1] > curDis+1):
+            o_index = findAppearancePosition(cell, open)
+            if (tuple(cell) not in predessor) or (o_index >= 0 and open[o_index][1] > curDis+1):    #Convert to tuple for using dictionary
                 open.append([cell, curDis+1])
                 predessor[tuple(cell)] = curState   #set the predessor of this cell is curState
         
