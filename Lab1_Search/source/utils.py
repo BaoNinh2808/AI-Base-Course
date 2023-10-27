@@ -41,16 +41,16 @@ def findLegalMoves(matrix, curState):
     y = curState[1]
 
     if (matrix[x][y-1] != 'x'): #left
-        neighbors.append([x,y-1])
+        neighbors.append((x,y-1))
 
     if (matrix[x][y+1] != 'x'): #right
-        neighbors.append([x, y+1])
+        neighbors.append((x, y+1))
 
     if (matrix[x-1][y] != 'x'): #top
-        neighbors.append([x-1, y])
+        neighbors.append((x-1, y))
 
     if (matrix[x+1][y] != 'x'): #bot
-        neighbors.append([x+1, y])
+        neighbors.append((x+1, y))
     return neighbors
 
 def checkComplete(current_cell, goal):

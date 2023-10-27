@@ -14,4 +14,4 @@ def heuristic_1(current_cell, goal):
 #The distance between the current cell and the goal cell using the distance formula
 
 def heuristic_2(current_cell, goal):
-    return sqrt ((current_cell[0] - goal[0])*(current_cell[0] - goal[0]) + (current_cell[0] - goal[0])*(current_cell[1] - goal[1]))
+    return sqrt ((current_cell[0] - goal[0])**2 + (current_cell[1] - goal[1])**2)

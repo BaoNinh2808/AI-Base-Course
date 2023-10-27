@@ -5,10 +5,11 @@ from heuristic import *
 from draw import *
 from utils import *
 from bfs import *
-
+from ucs import *
+from dfs import *
 
 filePath = "level_1.txt"
-bonus_points, matrix, start, goal = read_file(filePath)
+bonus_points, matrix, start, goal = read_file("input.txt")
 
 print(f'The height of the matrix: {len(matrix)}')
 print(f'The width of the matrix: {len(matrix[0])}')
@@ -18,6 +19,6 @@ print(f'The width of the matrix: {len(matrix[0])}')
 #visualize_gfbs_video(matrix, start, goal, bonus_points)
 
 # path, visit_list = AStar(matrix, bonus_points, start, goal, heuristic_1)
-path, visit_list = bfs(matrix, start, goal)
-visualize_maze(matrix,bonus_points,start,goal,path)
+path, visit_list = AStar(matrix, bonus_points, start, goal, heuristic_1)
+visualize_maze(matrix, bonus_points, start, goal, path)
 visualize_video(matrix=matrix, bonus_points=bonus_points, start=start, goal=goal, path=path, visit_list=visit_list)

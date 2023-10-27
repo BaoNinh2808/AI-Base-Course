@@ -14,41 +14,52 @@ def visualize_video(matrix, bonus_points, start, goal, WIDTH = 500, HEIGHT = 700
 
     walls=[(i,j) for i in range(len(matrix)) for j in range(len(matrix[0])) if matrix[i][j]=='x']
     for wall in walls:
-        rect = pygame.Rect(wall[0] * cell_size, wall[1] * cell_size, cell_size, cell_size)
+        rect = pygame.Rect(wall[1] * cell_size, wall[0] * cell_size, cell_size, cell_size)
         pygame.draw.rect(screen, (0, 0, 0), rect)  #black
 
     for x,y,reward in bonus_points:
-        rect = pygame.Rect(x * cell_size, y * cell_size, cell_size, cell_size)
+        rect = pygame.Rect(y * cell_size, x * cell_size, cell_size, cell_size)
         pygame.draw.rect(screen, (0, 255, 0), rect)  #Green
 
-    rect_start = pygame.Rect(start[0] * cell_size, start[1] * cell_size, cell_size, cell_size)
-    rect_end   = pygame.Rect(goal[0] * cell_size, goal[1] * cell_size, cell_size, cell_size)
+    rect_start = pygame.Rect(start[1] * cell_size, start[0] * cell_size, cell_size, cell_size)
+    rect_goal   = pygame.Rect(goal[1] * cell_size, goal[0] * cell_size, cell_size, cell_size)
     pygame.draw.rect(screen, (0, 0, 255), rect_start) #blue
-    pygame.draw.rect(screen, (255, 0, 0), rect_end) #red
+    pygame.draw.rect(screen, (255, 0, 0), rect_goal) #red
 
-    #Stimulate the run way
+    #Stimulate the way that algorithm run
     for i in range(len(visit_list)):
         current_cell = visit_list[i]
-        if (current_cell != start and current_cell != goal):
-            rect = pygame.Rect(current_cell[0] * cell_size, current_cell[1] * cell_size, cell_size, cell_size)
+        if (current_cell != start):
+            rect = pygame.Rect(current_cell[1] * cell_size, current_cell[0] * cell_size, cell_size, cell_size)
             pygame.draw.rect(screen, (255, 127, 0), rect)  #Orange
             pygame.display.update()
             pygame.time.Clock().tick(15)
 
-    #Draw path
+    #Draw finding path from start -> goal
     if path:
-        for i in range(1, len(path)-1):
+        for i in range(1, len(path)):
             current_cell = path[i]
             previous_cell = path[i-1]
-            rect = pygame.Rect(current_cell[0] * cell_size, current_cell[1] * cell_size, cell_size, cell_size)
+            rect = pygame.Rect(current_cell[1] * cell_size, current_cell[0] * cell_size, cell_size, cell_size)
             pygame.draw.rect(screen, (128, 0, 128), rect)  #purple
-            
-            point1 = pygame.Vector2(previous_cell[0] * cell_size + cell_size // 2, previous_cell[1] * cell_size + cell_size // 2)
-            point2 = pygame.Vector2(current_cell[0] * cell_size + cell_size // 2, current_cell[1] * cell_size + cell_size // 2)
+            if (i == len(path)-1): # goal
+                pygame.draw.rect(screen, (255, 0, 0), rect) #red
+
+            point1 = pygame.Vector2(previous_cell[1] * cell_size + cell_size // 2, previous_cell[0] * cell_size + cell_size // 2)
+            point2 = pygame.Vector2(current_cell[1] * cell_size + cell_size // 2, current_cell[0] * cell_size + cell_size // 2)
             pygame.draw.line(screen, (255, 255, 255), point1, point2) #white
 
             pygame.display.update()
             pygame.time.Clock().tick(30)
+
+    # Pause for look
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+
+        pygame.display.update()
+        clock.tick(15)
 
 def visualize_maze(matrix, bonus, start, end, route=None):
     """

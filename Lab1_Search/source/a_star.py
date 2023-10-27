@@ -1,44 +1,46 @@
 from heuristic import *
 from utils import *
 
-def findAppearancePosition(open_list, current_cell):
-    for i in range(len(open_list)):
-        if (current_cell == open_list[0]):
-            return i
-    return -1
+import queue
 
-
+# A* algorithm implementation
 def AStar(matrix, bonus_points, start, goal, estimateFunction):
-    open_list = [[start,0]]  #open set
-    predessor = {}      #store the predessor of one cell - use for trace back
-    visit_list = []
+    open_cells = [(0, start)]  # Open cells set with initial cell (0, start) - format (estimate_value, cell)
 
-    while (len(open_list) > 0):  #is not empty 
-        index = findCandicateElement(open_list, goal, estimateFunction)
-        curState, curDis = open_list.pop(index)
-        visit_list.append(curState)
+    predecessor = {}  # Store the predecessor of each cell for tracing the path
+    visit_list = []  # List to keep track of visited cells in order -> use for draw image after
 
-        #check if exit
-        if (checkComplete(curState, goal)):
+    # While there are open cells to explore
+    while open_cells:
+        open_cells.sort(key=lambda cell: cell[0])  # Sort the open cells by estimate cost
+        estDis, curState = open_cells.pop(0)  # Get the cell with the lowest estimate cost
+        visit_list.append(curState)  # Add this cell to the visited list
+
+        # Check if we have reached the goal
+        if checkComplete(curState, goal):
             break
 
-        #find neighbour cells that agent can move from the current cell (top, left, bottom, right)
+        curDis = estDis - estimateFunction(curState, goal)  # real current cost g(n) = f(n) - h(n)
+
+        # Find neighboring cells that the agent can move to (top, left, bottom, right)
         neighbours = findLegalMoves(matrix, curState)
-        
-        #for each cell, check if is accessed yet - if not accessed yet, put it into the open list
+
+        # For each neighbor, check if it has not been accessed yet or has a lower estimate value than itseft in the open list
         for cell in neighbours:
-            o_index = findAppearancePosition(cell, open_list)
-            if (tuple(cell) not in predessor) or (o_index >= 0 and open_list[o_index][1] > curDis+1):    #Convert to tuple for using dictionary
-                open_list.append([cell, curDis+1])
-                predessor[tuple(cell)] = curState   #set the predessor of this cell is curState
-            
-    if tuple(goal) not in predessor:    #Cann't find the path
-        return None, visit_list
+            index = next((i for i, x in enumerate(open_cells) if x[1] == cell), -1) #find the index of cell in the open list - if no appearance, return -1
+            estimate_value = curDis + 1 + estimateFunction(cell, goal)
 
-    #find the path to exit 
-    # Trace the path by backtracking from goal to start
+            # If the cell has not been accessed or has a lower estimate, add it to the open cells
+            if (cell not in predecessor) or (index >= 0 and estimate_value < open_cells[index][0]):
+                open_cells.append((estimate_value, cell))
+                predecessor[cell] = curState  # Set the predecessor of this cell as curState
+
+    if goal not in predecessor:  # If no path to the goal is found
+        return ([], visit_list)
+
+    # Find the path to the exit by backtracking from the goal to the start
     path = [goal]
-    while path[len(path) - 1] != start:
-        path.append(predessor[tuple(path[len(path) - 1])])
+    while path[len(path)-1] != start:
+        path.append(predecessor[path[len(path)-1]])
 
-    return list(reversed(path)), visit_list
+    return (list(reversed(path)), visit_list)

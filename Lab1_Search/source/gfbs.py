@@ -1,36 +1,41 @@
-from heuristic import*
-from utils import*
+from heuristic import *
+from utils import *
+import queue
 
+# Greedy Best-First Search (GBFS) algorithm implementation
 def gbfs(matrix, bonus_points, start, goal, estimateFunction):
-    open = [start]  #open set
-    predessor = {}  #store the predessor of one cell - use for trace back
-    visit_list = []
+    open_cells = queue.PriorityQueue()  # Priority queue for open cells based on heuristic value
+    open_cells.put((0, start))          # format (heuristic_value, cell) -> priority queue will sort in heuristic_value
 
-    while (len(open) > 0):  #is not empty 
-        index = findCandicateElement(open, goal, estimateFunction)
-        curState = open.pop(index)
-        visit_list.append(curState)
+    predecessor = {}    # Store the predecessor of each cell for tracing the path
+    visit_list = []     # List to keep track of visited cells in order -> use for draw image after
 
-        #check if exit
-        if (checkComplete(curState, goal)):
+    # While the open cells set is not empty
+    while not open_cells.empty():  
+        _, curState = open_cells.get()  # Get the cell with the lowest heuristic value
+        visit_list.append(curState)     # Add this cell to the visited list
+
+        # Check if we have reached the goal
+        if checkComplete(curState, goal):
             break
 
-        #find neighbour cells that agent can move from the current cell (top, left, bottom, right)
+        # Find neighboring cells that the agent can move to (top, left, bottom, right)
         neighbours = findLegalMoves(matrix, curState)
-        
-        #for each cell, check if is accessed yet - if not accessed yet, put it into the open list
+
+        # For each neighbor, check if it has not been accessed yet - if not, add it to the open_cells set
         for cell in neighbours:
-            if tuple(cell) not in predessor:    #Convert to tuple for using dictionary
-                open.append(cell)
-                predessor[tuple(cell)] = curState   #set the predessor of this cell is curState
+            if cell not in predecessor:
+                heuristic_value = estimateFunction(cell, goal)
+                open_cells.put((heuristic_value, cell))
+                predecessor[cell] = curState  # Set the predecessor of this cell as curState
 
-    if tuple(goal) not in predessor:    #Cann't find the path
-        return None, visit_list
+    if goal not in predecessor:  # If no path to the goal is found
+        return ([], visit_list)
 
-    #find the path to exit 
-    # Trace the path by backtracking from goal to start
+    # Find the path to the exit by backtracking from the goal to the start
     path = [goal]
-    while path[len(path) - 1] != start:
-        path.append(predessor[tuple(path[len(path) - 1])])
+    while path[len(path)-1] != start:
+        path.append(predecessor[path[len(path)-1]])
 
-    return list(reversed(path)), visit_list
+    return (list(reversed(path)), visit_list)
+
