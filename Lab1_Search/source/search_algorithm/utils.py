@@ -232,7 +232,3 @@ def visualize_maze(matrix, bonus, start, end, route=None, save_path=None):
     if save_path:
         # Save the plot as an image at the specified path (e.g., 'maze_visualization.png')
         plt.savefig(save_path, bbox_inches='tight', pad_inches=0.1)
-        
-    plt.show()
-
-    

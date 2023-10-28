@@ -30,6 +30,9 @@ def outputBFS(matrix, bonus_points, start, goal, outputPath):
 
     video_path = os.path.join(bfsOutPath, "bfs.mp4")
     visualize_video(matrix, bonus_points, start, goal, visit_list=visit_list, path=path, outPath= video_path, title= "BFS Algorithm")
+    
+    image_path = os.path.join(bfsOutPath, "bfs.jpg")
+    visualize_maze(matrix, bonus_points, start, goal, path, image_path)
 
 def outputDFS(matrix, bonus_points, start, goal, outputPath):
     dfsOutPath = os.path.join(outputPath, 'dfs')
@@ -43,6 +46,9 @@ def outputDFS(matrix, bonus_points, start, goal, outputPath):
     video_path = os.path.join(dfsOutPath, "dfs.mp4")
     visualize_video(matrix, bonus_points, start, goal, visit_list=visit_list, path=path, outPath= video_path, title= "DFS Algorithm")
     
+    image_path = os.path.join(dfsOutPath, "dfs.jpg")
+    visualize_maze(matrix, bonus_points, start, goal, path, image_path)
+
 def outputUCS(matrix, bonus_points, start, goal, outputPath):
     ucsOutPath = os.path.join(outputPath, 'ucs')
     os.makedirs(ucsOutPath, exist_ok=True)
@@ -54,6 +60,9 @@ def outputUCS(matrix, bonus_points, start, goal, outputPath):
 
     video_path = os.path.join(ucsOutPath, "ucs.mp4")
     visualize_video(matrix, bonus_points, start, goal, visit_list=visit_list, path=path, outPath= video_path, title= "UCS Algorithm")
+
+    image_path = os.path.join(ucsOutPath, "ucs.jpg")
+    visualize_maze(matrix, bonus_points, start, goal, path, image_path)
 
 def outputGBFS(matrix, bonus_points, start, goal, outputPath):
     gbfsOutPath = os.path.join(outputPath, 'gbfs')
@@ -72,6 +81,11 @@ def outputGBFS(matrix, bonus_points, start, goal, outputPath):
     visualize_video(matrix, bonus_points, start, goal, visit_list=visit_list_1, path=path_1, outPath= video_path_1, title= "GBFS Algorithm - Manhattan Heuristic")
     visualize_video(matrix, bonus_points, start, goal, visit_list=visit_list_2, path=path_2, outPath= video_path_2, title= "GBFS Algorithm - Euclidean Heuristic")
 
+    image_path_1 = os.path.join(gbfsOutPath, "gbfs_heuristic_1.jpg")
+    image_path_2 = os.path.join(gbfsOutPath, "gbfs_heuristic_2.jpg")
+    visualize_maze(matrix, bonus_points, start, goal, path_1, image_path_1)
+    visualize_maze(matrix, bonus_points, start, goal, path_2, image_path_2)
+
 def outputASTAR(matrix, bonus_points, start, goal, outputPath):
     astarOutPath = os.path.join(outputPath, 'astar')
     os.makedirs(astarOutPath, exist_ok=True)
@@ -88,3 +102,8 @@ def outputASTAR(matrix, bonus_points, start, goal, outputPath):
     video_path_2 = os.path.join(astarOutPath, "astar_heuristic_2.mp4")
     visualize_video(matrix, bonus_points, start, goal, visit_list=visit_list_1, path=path_1, outPath= video_path_1, title= "A* Algorithm - Manhattan Heuristic")
     visualize_video(matrix, bonus_points, start, goal, visit_list=visit_list_2, path=path_2, outPath= video_path_2, title= "A* Algorithm - Euclidean Heuristic")
+
+    image_path_1 = os.path.join(astarOutPath, "astar_heuristic_1.jpg")
+    image_path_2 = os.path.join(astarOutPath, "astar_heuristic_2.jpg")
+    visualize_maze(matrix, bonus_points, start, goal, path_1, image_path_1)
+    visualize_maze(matrix, bonus_points, start, goal, path_2, image_path_2)
