@@ -1,10 +1,11 @@
 import os
-from a_star import *
-from gfbs import *
-from heuristic import *
-from bfs import *
-from ucs import *
-from dfs import *
+from search_algorithm.a_star import *
+from search_algorithm.gfbs import *
+from search_algorithm.heuristic import *
+from search_algorithm.bfs import *
+from search_algorithm.ucs import *
+from search_algorithm.dfs import *
+from search_algorithm.utils import *
 
 def write_ouput_txt_file(route, txt_path):
     cost = len(route)
@@ -28,7 +29,7 @@ def outputBFS(matrix, bonus_points, start, goal, outputPath):
     write_ouput_txt_file(path, txt_path)
 
     video_path = os.path.join(bfsOutPath, "bfs.mp4")
-    visualize_video(matrix, bonus_points, start, goal, visit_list=visit_list, path=path, outPath= video_path)
+    visualize_video(matrix, bonus_points, start, goal, visit_list=visit_list, path=path, outPath= video_path, title= "BFS Algorithm")
 
 def outputDFS(matrix, bonus_points, start, goal, outputPath):
     dfsOutPath = os.path.join(outputPath, 'dfs')
@@ -40,7 +41,7 @@ def outputDFS(matrix, bonus_points, start, goal, outputPath):
     write_ouput_txt_file(path, txt_path)
 
     video_path = os.path.join(dfsOutPath, "dfs.mp4")
-    visualize_video(matrix, bonus_points, start, goal, visit_list=visit_list, path=path, outPath= video_path)
+    visualize_video(matrix, bonus_points, start, goal, visit_list=visit_list, path=path, outPath= video_path, title= "DFS Algorithm")
     
 def outputUCS(matrix, bonus_points, start, goal, outputPath):
     ucsOutPath = os.path.join(outputPath, 'ucs')
@@ -52,7 +53,7 @@ def outputUCS(matrix, bonus_points, start, goal, outputPath):
     write_ouput_txt_file(path, txt_path)
 
     video_path = os.path.join(ucsOutPath, "ucs.mp4")
-    visualize_video(matrix, bonus_points, start, goal, visit_list=visit_list, path=path, outPath= video_path)
+    visualize_video(matrix, bonus_points, start, goal, visit_list=visit_list, path=path, outPath= video_path, title= "UCS Algorithm")
 
 def outputGBFS(matrix, bonus_points, start, goal, outputPath):
     gbfsOutPath = os.path.join(outputPath, 'gbfs')
@@ -68,8 +69,8 @@ def outputGBFS(matrix, bonus_points, start, goal, outputPath):
 
     video_path_1 = os.path.join(gbfsOutPath, "gbfs_heuristic_1.mp4")
     video_path_2 = os.path.join(gbfsOutPath, "gbfs_heuristic_2.mp4")
-    visualize_video(matrix, bonus_points, start, goal, visit_list=visit_list_1, path=path_1, outPath= video_path_1)
-    visualize_video(matrix, bonus_points, start, goal, visit_list=visit_list_2, path=path_2, outPath= video_path_2)
+    visualize_video(matrix, bonus_points, start, goal, visit_list=visit_list_1, path=path_1, outPath= video_path_1, title= "GBFS Algorithm - Manhattan Heuristic")
+    visualize_video(matrix, bonus_points, start, goal, visit_list=visit_list_2, path=path_2, outPath= video_path_2, title= "GBFS Algorithm - Euclidean Heuristic")
 
 def outputASTAR(matrix, bonus_points, start, goal, outputPath):
     astarOutPath = os.path.join(outputPath, 'astar')
@@ -85,5 +86,5 @@ def outputASTAR(matrix, bonus_points, start, goal, outputPath):
 
     video_path_1 = os.path.join(astarOutPath, "astar_heuristic_1.mp4")
     video_path_2 = os.path.join(astarOutPath, "astar_heuristic_2.mp4")
-    visualize_video(matrix, bonus_points, start, goal, visit_list=visit_list_1, path=path_1, outPath= video_path_1)
-    visualize_video(matrix, bonus_points, start, goal, visit_list=visit_list_2, path=path_2, outPath= video_path_2)
+    visualize_video(matrix, bonus_points, start, goal, visit_list=visit_list_1, path=path_1, outPath= video_path_1, title= "A* Algorithm - Manhattan Heuristic")
+    visualize_video(matrix, bonus_points, start, goal, visit_list=visit_list_2, path=path_2, outPath= video_path_2, title= "A* Algorithm - Euclidean Heuristic")

@@ -1,4 +1,4 @@
-from utils import *
+from search_algorithm.utils import *
 import queue
 
 # Uniform Cost Search (UCS) algorithm implementation

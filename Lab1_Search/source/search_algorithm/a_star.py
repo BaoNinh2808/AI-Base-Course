@@ -1,5 +1,5 @@
-from heuristic import *
-from utils import *
+from search_algorithm.heuristic import *
+from search_algorithm.utils import *
 
 import queue
 

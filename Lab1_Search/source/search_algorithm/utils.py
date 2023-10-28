@@ -1,3 +1,7 @@
+import pygame
+import matplotlib.pyplot as plt
+import vidmaker
+
 def read_file(file_name: str = 'maze.txt'):
     f=open(file_name,'r')
     n_bonus_points = int(next(f)[:-1])
@@ -47,35 +51,89 @@ def checkComplete(current_cell, goal):
         return True
     return False
 
-import pygame
-import matplotlib.pyplot as plt
-import vidmaker
-
-def visualize_video(matrix, bonus_points, start, goal, WIDTH = 500, HEIGHT = 700, visit_list = None, path = None, outPath = "visualization_video.mp4"):
+def visualize_video(matrix, bonus_points, start, goal, WIDTH = 720, HEIGHT = 540, visit_list = None, path = None, outPath = "visualization_video.mp4", title = "Search Algorithm"):
     # pygame setup
     pygame.init()
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
     clock = pygame.time.Clock()
     running = 0
     
+    padding = 50
+
     video = vidmaker.Video(outPath, late_export=True)
 
-    cell_size = min(WIDTH // len(matrix[0]), (HEIGHT-200) // len(matrix))
+    cell_size = WIDTH // len(matrix[0])
     screen.fill((255, 255, 255))  # Clear the screen
 
     walls=[(i,j) for i in range(len(matrix)) for j in range(len(matrix[0])) if matrix[i][j]=='x']
     for wall in walls:
-        rect = pygame.Rect(wall[1] * cell_size, wall[0] * cell_size, cell_size, cell_size)
+        rect = pygame.Rect(wall[1] * cell_size, padding + wall[0] * cell_size, cell_size, cell_size)
         pygame.draw.rect(screen, (0, 0, 0), rect)  #black
 
     for x,y,reward in bonus_points:
-        rect = pygame.Rect(y * cell_size, x * cell_size, cell_size, cell_size)
+        rect = pygame.Rect(y * cell_size, padding + x * cell_size, cell_size, cell_size)
         pygame.draw.rect(screen, (0, 255, 0), rect)  #Green
 
-    rect_start = pygame.Rect(start[1] * cell_size, start[0] * cell_size, cell_size, cell_size)
-    rect_goal   = pygame.Rect(goal[1] * cell_size, goal[0] * cell_size, cell_size, cell_size)
+    rect_start = pygame.Rect(start[1] * cell_size, padding + start[0] * cell_size, cell_size, cell_size)
+    rect_goal   = pygame.Rect(goal[1] * cell_size, padding + goal[0] * cell_size, cell_size, cell_size)
     pygame.draw.rect(screen, (0, 0, 255), rect_start) #blue
     pygame.draw.rect(screen, (255, 0, 0), rect_goal) #red
+
+    # Draw the menu
+    menu_font = pygame.font.Font(None, 36)  # You can adjust the font and size
+    menu_text = menu_font.render(title, True, (0, 0, 0))  # Render the text
+    menu_rect = menu_text.get_rect()
+    menu_rect.center = (WIDTH // 2, 15)  # Adjust the position of the menu
+
+    # Draw the menu on the screen
+    screen.blit(menu_text, menu_rect)
+
+   # Dictionary to map color descriptions to color values and note text
+    color_notes = {
+        (0, 0, 255): "Start",
+        (255, 0, 0): "Goal",
+        (0, 255, 0): "Bonus Point",
+        (255, 127, 0): "Visited",
+        (128, 0, 128): "Route",
+        # Add more color descriptions as needed
+    }
+
+    # Divide the color notes into two columns
+    column1 = {}
+    column2 = {}
+
+    # Separate color notes into two columns
+    for i, (color, description) in enumerate(color_notes.items()):
+        if i % 2 == 0:
+            column1[color] = (description)
+        else:
+            column2[color] = (description)
+
+    # Draw the color notes for the first column
+    note_font = pygame.font.Font(None, 20)  # You can adjust the font and size
+    for i, (color, description) in enumerate(column1.items()):
+        # Draw the color rectangle
+        rect = pygame.Rect(10, HEIGHT - 100 + i * 30, 20, 20)
+        pygame.draw.rect(screen, color, rect)
+        
+        # Render and draw the note text
+        note_text = note_font.render(f"{description}", True, (0, 0, 0))  # Render the text
+        note_rect = note_text.get_rect()
+        note_rect.topleft = (40, HEIGHT - 100 + i * 30)
+        screen.blit(note_text, note_rect)
+
+    # Draw the color notes for the second column
+    for i, (color, description) in enumerate(column2.items()):
+        # Draw the color rectangle
+        rect = pygame.Rect(250, HEIGHT - 100 + i * 30, 20, 20)
+        pygame.draw.rect(screen, color, rect)
+        
+        # Render and draw the note text
+        note_text = note_font.render(f"{description}", True, (0, 0, 0))  # Render the text
+        note_rect = note_text.get_rect()
+        note_rect.topleft = (280, HEIGHT - 100 + i * 30)
+        screen.blit(note_text, note_rect)
+
 
     video.update(pygame.surfarray.pixels3d(screen).swapaxes(0, 1), inverted=False)
 
@@ -83,7 +141,7 @@ def visualize_video(matrix, bonus_points, start, goal, WIDTH = 500, HEIGHT = 700
     for i in range(len(visit_list)):
         current_cell = visit_list[i]
         if (current_cell != start):
-            rect = pygame.Rect(current_cell[1] * cell_size, current_cell[0] * cell_size, cell_size, cell_size)
+            rect = pygame.Rect(current_cell[1] * cell_size, padding + current_cell[0] * cell_size, cell_size, cell_size)
             pygame.draw.rect(screen, (255, 127, 0), rect)  #Orange
             video.update(pygame.surfarray.pixels3d(screen).swapaxes(0, 1), inverted=False)
             pygame.display.update()
@@ -94,13 +152,13 @@ def visualize_video(matrix, bonus_points, start, goal, WIDTH = 500, HEIGHT = 700
         for i in range(1, len(path)):
             current_cell = path[i]
             previous_cell = path[i-1]
-            rect = pygame.Rect(current_cell[1] * cell_size, current_cell[0] * cell_size, cell_size, cell_size)
+            rect = pygame.Rect(current_cell[1] * cell_size, padding + current_cell[0] * cell_size, cell_size, cell_size)
             pygame.draw.rect(screen, (128, 0, 128), rect)  #purple
             if (i == len(path)-1): # goal
                 pygame.draw.rect(screen, (255, 0, 0), rect) #red
 
-            point1 = pygame.Vector2(previous_cell[1] * cell_size + cell_size // 2, previous_cell[0] * cell_size + cell_size // 2)
-            point2 = pygame.Vector2(current_cell[1] * cell_size + cell_size // 2, current_cell[0] * cell_size + cell_size // 2)
+            point1 = pygame.Vector2(previous_cell[1] * cell_size + cell_size // 2, padding + previous_cell[0] * cell_size + cell_size // 2)
+            point2 = pygame.Vector2(current_cell[1] * cell_size + cell_size // 2, padding + current_cell[0] * cell_size + cell_size // 2)
             pygame.draw.line(screen, (255, 255, 255), point1, point2) #white
 
             video.update(pygame.surfarray.pixels3d(screen).swapaxes(0, 1), inverted=False)
