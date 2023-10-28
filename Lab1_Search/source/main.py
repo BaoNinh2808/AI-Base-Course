@@ -2,7 +2,7 @@ import os
 from output import *
 
 def processInputLevel1():
-    inputPath = os.path.join(os.curdir,'input\\level_1')
+    inputPath = os.path.join(os.curdir,'input/level_1')
     txt_files = os.listdir(inputPath)
     for input in txt_files:
         #read input
@@ -11,7 +11,7 @@ def processInputLevel1():
         #create output dir
         filename = os.path.basename(input)
         filename_without_extension = os.path.splitext(filename)[0]
-        outputPath = os.path.join(os.curdir,'output\\level_1', filename_without_extension)
+        outputPath = os.path.join(os.curdir,'output/level_1', filename_without_extension)
         os.makedirs(outputPath, exist_ok=True)
 
         #output 
@@ -22,7 +22,7 @@ def processInputLevel1():
         outputASTAR(matrix, bonus_points, start, goal, outputPath)
 
 def processInputLevel2():
-    inputPath = os.path.join(os.curdir,'input\\level_2')
+    inputPath = os.path.join(os.curdir,'input/level_2')
     txt_files = os.listdir(inputPath)
     for input in txt_files:
         #read input
@@ -31,7 +31,7 @@ def processInputLevel2():
         #create output dir
         filename = os.path.basename(input)
         filename_without_extension = os.path.splitext(filename)[0]
-        outputPath = os.path.join(os.curdir,'output\\level_2', filename_without_extension)
+        outputPath = os.path.join(os.curdir,'output/level_2', filename_without_extension)
         os.makedirs(outputPath, exist_ok=True)
 
         #output
