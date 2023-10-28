@@ -1,24 +1,41 @@
 import os
-from a_star import *
-from gfbs import *
-from heuristic import *
-from draw import *
-from utils import *
-from bfs import *
-from ucs import *
-from dfs import *
+from output import *
 
-filePath = "level_1.txt"
-bonus_points, matrix, start, goal = read_file("input.txt")
+def processInputLevel1():
+    inputPath = os.path.join(os.curdir,'input\\level_1')
+    txt_files = os.listdir(inputPath)
+    for input in txt_files:
+        #read input
+        bonus_points, matrix, start, goal = read_file(os.path.join(inputPath, input))
 
-print(f'The height of the matrix: {len(matrix)}')
-print(f'The width of the matrix: {len(matrix[0])}')
+        #create output dir
+        filename = os.path.basename(input)
+        filename_without_extension = os.path.splitext(filename)[0]
+        outputPath = os.path.join(os.curdir,'output\\level_1', filename_without_extension)
+        os.makedirs(outputPath, exist_ok=True)
 
-#path = gbfs(matrix, start, goal)
-#visualize_maze(matrix,bonus_points,start,goal,path)
-#visualize_gfbs_video(matrix, start, goal, bonus_points)
+        #output 
+        outputBFS(matrix, bonus_points, start, goal, outputPath)
+        outputDFS(matrix, bonus_points, start, goal, outputPath)
+        outputUCS(matrix, bonus_points, start, goal, outputPath)
+        outputGBFS(matrix, bonus_points, start, goal, outputPath)
+        outputASTAR(matrix, bonus_points, start, goal, outputPath)
 
-# path, visit_list = AStar(matrix, bonus_points, start, goal, heuristic_1)
-path, visit_list = AStar(matrix, bonus_points, start, goal, heuristic_1)
-visualize_maze(matrix, bonus_points, start, goal, path)
-visualize_video(matrix=matrix, bonus_points=bonus_points, start=start, goal=goal, path=path, visit_list=visit_list)
+def processInputLevel2():
+    inputPath = os.path.join(os.curdir,'input\\level_2')
+    txt_files = os.listdir(inputPath)
+    for input in txt_files:
+        #read input
+        bonus_points, matrix, start, goal = read_file(os.path.join(inputPath, input))
+
+        #create output dir
+        filename = os.path.basename(input)
+        filename_without_extension = os.path.splitext(filename)[0]
+        outputPath = os.path.join(os.curdir,'output\\level_2', filename_without_extension)
+        os.makedirs(outputPath, exist_ok=True)
+
+        #output
+        ##aa
+        ##bb
+        
+processInputLevel1()

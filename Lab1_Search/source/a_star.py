@@ -4,7 +4,7 @@ from utils import *
 import queue
 
 # A* algorithm implementation
-def AStar(matrix, bonus_points, start, goal, estimateFunction):
+def astar(matrix, bonus_points, start, goal, estimateFunction):
     open_cells = [(0, start)]  # Open cells set with initial cell (0, start) - format (estimate_value, cell)
 
     predecessor = {}  # Store the predecessor of each cell for tracing the path
