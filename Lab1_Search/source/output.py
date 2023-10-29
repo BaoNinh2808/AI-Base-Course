@@ -6,6 +6,7 @@ from search_algorithm.bfs import *
 from search_algorithm.ucs import *
 from search_algorithm.dfs import *
 from search_algorithm.utils import *
+from search_algorithm.point_heristic import *
 
 def write_ouput_txt_file(route, txt_path):
     cost = len(route)
@@ -105,5 +106,27 @@ def outputASTAR(matrix, bonus_points, start, goal, outputPath):
 
     image_path_1 = os.path.join(astarOutPath, "astar_heuristic_1.jpg")
     image_path_2 = os.path.join(astarOutPath, "astar_heuristic_2.jpg")
+    visualize_maze(matrix, bonus_points, start, goal, path_1, image_path_1)
+    visualize_maze(matrix, bonus_points, start, goal, path_2, image_path_2)
+
+def outputPOINT_MAP(matrix, bonus_points, start, goal, outputPath):
+    pointOutPath = os.path.join(outputPath, 'point')
+    os.makedirs(pointOutPath, exist_ok=True)
+
+    path_1, visit_list_1 = point_heuristic(matrix, bonus_points, start, goal, heuristic_1)
+    path_2, visit_list_2 = point_heuristic(matrix, bonus_points, start, goal, heuristic_2)
+
+    txt_path_1 = os.path.join(pointOutPath, "point_heuristic_1.txt")
+    write_ouput_txt_file(path_1, txt_path_1)
+    txt_path_2 = os.path.join(pointOutPath, "point_heuristic_2.txt")
+    write_ouput_txt_file(path_2, txt_path_2)
+
+    video_path_1 = os.path.join(pointOutPath, "point_heuristic_1.mp4")
+    video_path_2 = os.path.join(pointOutPath, "point_heuristic_2.mp4")
+    visualize_video(matrix, bonus_points, start, goal, visit_list=visit_list_1, path=path_1, outPath= video_path_1, title= "Heuristic Algorithm for Point Map - Manhattan Heuristic")
+    visualize_video(matrix, bonus_points, start, goal, visit_list=visit_list_2, path=path_2, outPath= video_path_2, title= "Heuristic Algorithm for Point Map - Euclidean Heuristic")
+
+    image_path_1 = os.path.join(pointOutPath, "point_heuristic_1.jpg")
+    image_path_2 = os.path.join(pointOutPath, "point_heuristic_2.jpg")
     visualize_maze(matrix, bonus_points, start, goal, path_1, image_path_1)
     visualize_maze(matrix, bonus_points, start, goal, path_2, image_path_2)

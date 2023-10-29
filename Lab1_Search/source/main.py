@@ -35,7 +35,14 @@ def processInputLevel2():
         os.makedirs(outputPath, exist_ok=True)
 
         #output
-        ##aa
-        ##bb
+        outputPOINT_MAP(matrix, bonus_points, start, goal, outputPath)
         
-processInputLevel1()
+#processInputLevel1()
+# inputPath = os.path.join(os.curdir,'input/level_1')
+# txt_files = os.listdir(inputPath)
+# for input in txt_files:
+#     #read input
+#     bonus_points, matrix, start, goal = read_file(os.path.join(inputPath, input))
+#     visualize_maze(matrix, bonus_points, start, goal, save_path="input5_level1.jpg")
+
+processInputLevel2()

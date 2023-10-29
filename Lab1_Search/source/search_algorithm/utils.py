@@ -204,7 +204,7 @@ def visualize_maze(matrix, bonus, start, end, route=None, save_path=None):
         direction.pop(0)
 
     #2. Drawing the map
-    ax=plt.figure(dpi=100).add_subplot(111)
+    ax=plt.figure(figsize= (15,8), dpi=100).add_subplot(111)
 
     for i in ['top','bottom','right','left']:
         ax.spines[i].set_visible(False)
