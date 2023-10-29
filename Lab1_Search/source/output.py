@@ -8,7 +8,7 @@ from search_algorithm.dfs import *
 from search_algorithm.utils import *
 from search_algorithm.point_heristic import *
 
-def write_ouput_txt_file(route, txt_path):
+def write_ouput_txt_file(route, txt_path, point_earn = 0):
     cost = len(route)
     if os.path.exists(txt_path):    #delete the old one
         os.remove(txt_path)
@@ -17,7 +17,7 @@ def write_ouput_txt_file(route, txt_path):
     if (cost == 0):
         f.write("NO")
     else:
-        f.write(str(cost))
+        f.write(str(cost+point_earn))
     f.close()
 
 def outputBFS(matrix, bonus_points, start, goal, outputPath):
@@ -113,8 +113,8 @@ def outputPOINT_MAP(matrix, bonus_points, start, goal, outputPath):
     pointOutPath = os.path.join(outputPath, 'point')
     os.makedirs(pointOutPath, exist_ok=True)
 
-    path_1, visit_list_1 = point_heuristic(matrix, bonus_points, start, goal, heuristic_1)
-    path_2, visit_list_2 = point_heuristic(matrix, bonus_points, start, goal, heuristic_2)
+    path_1, visit_list_1, point_earn_1 = point_heuristic(matrix, bonus_points, start, goal, heuristic_1)
+    path_2, visit_list_2, point_earn_2 = point_heuristic(matrix, bonus_points, start, goal, heuristic_2)
 
     txt_path_1 = os.path.join(pointOutPath, "point_heuristic_1.txt")
     write_ouput_txt_file(path_1, txt_path_1)

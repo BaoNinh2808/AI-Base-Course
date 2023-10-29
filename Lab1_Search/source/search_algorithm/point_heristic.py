@@ -10,6 +10,7 @@ def point_heuristic(matrix, bonus_points, start, goal, estimateFunction):
     route = []
     travelled_points = []
 
+    point_earn = 0
     current_start = start
     # While there are open cells to explore
     while (not checkComplete(current_start, goal)):
@@ -49,28 +50,42 @@ def point_heuristic(matrix, bonus_points, start, goal, estimateFunction):
                     distance = new_distance
                     new_goal = point
 
-        isRealGoal, new_route, new_visit_list = astart_modify(matrix, bonus_points, current_start, new_goal, goal, estimateFunction) 
+        new_route, new_visit_list, new_start = astart_modify(matrix, bonus_points, travelled_points, current_start, new_goal, goal, estimateFunction) 
+        #update variables
         visit_list.extend(new_visit_list)
         route.extend(new_route)
+        current_start = new_start
+
+        # Cann't finding any legal path
         if (not new_route):
-            return ([], visit_list)
-        current_start = new_goal
-        if isRealGoal:
-            current_start = goal
+            return ([], visit_list, point_earn)
+        
+        #update point earn in the way
+        for x,y,reward in bonus_points: 
+            if (x,y) == current_start:
+                point_earn += reward 
 
-    return (route, visit_list)
+    return (route, visit_list, point_earn)
 
-def astart_modify(matrix, bonus_points, start, goal, realGoal, estimateFunction):
+def astart_modify(matrix, bonus_points, travelled_points, start, goal, realGoal, estimateFunction):
     open_cells = [(0, start)]  # Open cells set with initial cell (0, start) - format (estimate_value, cell)
     predecessor = {}  # Store the predecessor of each cell for tracing the path
     visit_list = []  # List to keep track of visited cells in order -> use for draw image after
 
     isRealGoal = False
+    isMeetPoint = False
+    curState = start
     # While there are open cells to explore
     while open_cells:
         open_cells.sort(key=lambda cell: cell[0])  # Sort the open cells by estimate cost
         estDis, curState = open_cells.pop(0)  # Get the cell with the lowest estimate cost
         visit_list.append(curState)  # Add this cell to the visited list
+
+        for x,y,reward in bonus_points: #Accidently meet bonus point
+            if (curState == (x,y) and curState not in travelled_points):
+                isMeetPoint = True
+                break
+        if (isMeetPoint): break
 
         # Check if we have reached the goal point
         if checkComplete(curState, goal):
@@ -95,18 +110,24 @@ def astart_modify(matrix, bonus_points, start, goal, realGoal, estimateFunction)
                 open_cells.append((estimate_value, cell))
                 predecessor[cell] = curState  # Set the predecessor of this cell as curState
 
-    if goal not in predecessor:  # If no path to the goal is found
-        return (isRealGoal, [], visit_list)
-
+    if (isMeetPoint == True):
+        path = [curState]
+        while path[len(path)-1] != start:
+            path.append(predecessor[path[len(path)-1]])
+        return (list(reversed(path)), visit_list, curState)
+    
     if (isRealGoal == True):
         path = [realGoal]
         while path[len(path)-1] != start:
             path.append(predecessor[path[len(path)-1]])
-        return (isRealGoal, list(reversed(path)), visit_list)
+        return (list(reversed(path)), visit_list, realGoal)
+    
+    if goal not in predecessor:  # If no path to the goal is found
+        return ([], visit_list, goal)
     
     # Find the path to the exit by backtracking from the goal to the start
     path = [goal]
     while path[len(path)-1] != start:
         path.append(predecessor[path[len(path)-1]])
 
-    return (isRealGoal, list(reversed(path)), visit_list)
+    return (list(reversed(path)), visit_list, goal)
