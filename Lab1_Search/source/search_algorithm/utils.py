@@ -23,7 +23,7 @@ def read_file(file_name: str = 'maze.txt'):
                 start = (i,j)
             if ((i == 0 and matrix[0][j] == ' ') or (j == 0 and matrix[i][0] == ' ') or (i == len(matrix)-1 and matrix[i][j] == ' ') or (j == len(matrix[0])-1 and matrix[i][j] == ' ')):
                 goal = (i,j)
-    
+    print(len(matrix[0]), len(matrix))
     return bonus_points, matrix, start, goal
 
 def findLegalMoves(matrix, curState):
