@@ -165,6 +165,11 @@ def visualize_video(matrix, bonus_points, start, goal, WIDTH = 720, HEIGHT = 540
             pygame.display.update()
             pygame.time.Clock().tick(30)
 
+    for x,y,reward in bonus_points:
+        if ((x,y) in path):
+            rect = pygame.Rect(y * cell_size, padding + x * cell_size, cell_size, cell_size)
+            pygame.draw.rect(screen, (0, 255, 0), rect)  #Green
+
     # Pause for look
     while (running < 10):
         running += 1
