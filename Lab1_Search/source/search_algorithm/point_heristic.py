@@ -47,7 +47,7 @@ def point_heuristic(matrix, bonus_points, start, goal, estimateFunction):
                     distance = new_distance
                     new_goal = point
 
-        isRealGoal, new_predecessor, new_visit_list = astart_modify(matrix, bonus_points, start, new_goal, goal, estimateFunction) 
+        isRealGoal, open_cells, new_predecessor, new_visit_list = astart_modify(matrix, bonus_points, start, new_goal, goal, estimateFunction) 
         visit_list.append(new_visit_list)
         predecessor.update(new_predecessor)
 
@@ -100,4 +100,4 @@ def astart_modify(matrix, bonus_points, start, goal, realGoal, estimateFunction)
                 open_cells.append((estimate_value, cell))
                 predecessor[cell] = curState  # Set the predecessor of this cell as curState
 
-    return (isRealGoal, predecessor, visit_list)
+    return (isRealGoal, open_cells, predecessor, visit_list)
