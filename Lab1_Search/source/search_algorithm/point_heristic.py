@@ -14,6 +14,7 @@ def point_heuristic(matrix, bonus_points, start, goal, estimateFunction):
     current_start = start
     # While there are open cells to explore
     while open_cells:
+        open_cells
         #find candicate point
         isRight = 1
         if ((goal[1] - current_start[1]) < 0):
@@ -47,16 +48,18 @@ def point_heuristic(matrix, bonus_points, start, goal, estimateFunction):
                     distance = new_distance
                     new_goal = point
 
-        isRealGoal, open_cells, new_predecessor, new_visit_list = astart_modify(matrix, bonus_points, start, new_goal, goal, estimateFunction) 
+        isRealGoal, new_open_cells, new_predecessor, new_visit_list = astart_modify(matrix, bonus_points, start, new_goal, goal, estimateFunction) 
         visit_list.append(new_visit_list)
         predecessor.update(new_predecessor)
-
+        
         path = [new_goal]
         while path[len(path)-1] != current_start:
             path.append(predecessor[path[len(path)-1]])
         
         route.extend(list(reversed(path)))
         current_start = new_goal
+
+        open_cells = new_open_cells
         if (isRealGoal):
             break
 
