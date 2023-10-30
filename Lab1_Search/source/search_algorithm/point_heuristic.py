@@ -5,14 +5,13 @@ import math
 # Point Heuristic algorithm implementation 
 # Point Heuristic using for map have point to find the short path in proper time
 def point_heuristic(matrix, bonus_points, start, goal, estimateFunction):
-    predecessor = {}  # Store the predecessor of each cell for tracing the path
     visit_list = []  # List to keep track of visited cells in order -> use for draw image after
     route = []
     travelled_points = []
 
     point_earn = 0
     current_start = start
-    # While there are open cells to explore
+    # While not attempt to goal
     while (not checkComplete(current_start, goal)):
         travelled_points.append(current_start)
 

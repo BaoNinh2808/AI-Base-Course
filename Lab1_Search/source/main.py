@@ -1,3 +1,16 @@
+##
+"""
+Reference: GeekForGeeks, ChatGPT, Wikipedia, VNOI
+"""
+## https://simple.wikipedia.org/wiki/Manhattan_distance
+## https://en.wikipedia.org/wiki/Euclidean_distance
+## https://vnoi.info/wiki/algo/graph-theory/breadth-first-search.md
+## https://www.geeksforgeeks.org/a-search-algorithm/
+## https://www.geeksforgeeks.org/greedy-best-first-search-algorithm/
+## https://openai.com/chatgpt
+##
+
+
 import os
 from output import *
 
@@ -36,13 +49,25 @@ def processInputLevel2():
 
         #output
         outputPOINT_MAP(matrix, bonus_points, start, goal, outputPath)
-        
-#processInputLevel1()
-# inputPath = os.path.join(os.curdir,'input/level_1')
-# txt_files = os.listdir(inputPath)
-# for input in txt_files:
-#     #read input
-#     bonus_points, matrix, start, goal = read_file(os.path.join(inputPath, input))
-#     visualize_maze(matrix, bonus_points, start, goal, save_path="input5_level1.jpg")
 
+def processInputLevel3():
+    inputPath = os.path.join(os.curdir,'input/level_3')
+    txt_files = os.listdir(inputPath)
+    for input in txt_files:
+        #read input
+        bonus_points, matrix, start, goal = read_file(os.path.join(inputPath, input))
+
+        #create output dir
+        filename = os.path.basename(input)
+        filename_without_extension = os.path.splitext(filename)[0]
+        outputPath = os.path.join(os.curdir,'output/level_3', filename_without_extension)
+        os.makedirs(outputPath, exist_ok=True)
+
+        #output
+        outputPICKUP_MAP(matrix, bonus_points, start, goal, outputPath)
+
+
+##main program
+processInputLevel1()
 processInputLevel2()
+processInputLevel3()
